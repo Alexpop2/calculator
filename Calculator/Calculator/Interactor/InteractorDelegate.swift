@@ -7,3 +7,8 @@
 //
 
 import Foundation
+
+protocol InteractorDelegate: class {
+    func highlightButton(tag: Int)
+    func cancelHighlightButtons()
+}

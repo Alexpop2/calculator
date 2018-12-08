@@ -8,6 +8,7 @@
 
 import Foundation
 
-protocol ViewControllerDelegate: class {
+protocol PresenterDelegate: class {
     func highlightButton(tag: Int)
+    func cancelHighlightButtons()
 }

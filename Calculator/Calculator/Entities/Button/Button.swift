@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum ButtonType {
     case num
@@ -24,14 +25,14 @@ enum ButtonType {
 class Button {
     let tag: Int
     let type: ButtonType
-    var num: Int?
+    var num: String?
     
     init(tag: Int, type: ButtonType) {
         self.tag = tag
         self.type = type
     }
     
-    init(tag: Int, num: Int) {
+    init(tag: Int, num: String) {
         self.tag = tag
         self.type = ButtonType.num
         self.num = num
