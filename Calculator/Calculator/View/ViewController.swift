@@ -21,6 +21,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         presenter = Presenter(delegate: self)
         // Do any additional setup after loading the view, typically from a nib.
+        //branch bug-1
     }
     
     override func viewWillLayoutSubviews() {
