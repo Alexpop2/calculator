@@ -161,6 +161,9 @@ class Calculator {
             condition = .secondNumberEnter
             return result
         case .ready:
+            if(operation == .subtraction) {
+                condition = .secondNumberEnter
+            }
             return firstNumber
         case .equalResult:
             condition = .secondNumberEnter
