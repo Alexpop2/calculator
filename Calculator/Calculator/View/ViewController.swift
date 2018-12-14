@@ -19,6 +19,8 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //presenter не должен тут создаваться
+        //presenter interactor - input и output
         presenter = Presenter(delegate: self)
         // Do any additional setup after loading the view, typically from a nib.
         //branch bug-1

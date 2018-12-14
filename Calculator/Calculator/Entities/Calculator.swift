@@ -170,12 +170,13 @@ class Calculator {
     }
     
     func equal() -> String {
-        guard let firstNumDouble = Double(firstNumber) else {
+        guard let firstNumDouble = Decimal(string: firstNumber) else {
             return "Ошибка"
         }
-        guard let secondNumDouble = Double(secondNumber) else {
+        guard let secondNumDouble = Decimal(string: secondNumber) else {
             return "Ошибка"
         }
+        
         switch operation {
         case .none:
             return firstNumber
