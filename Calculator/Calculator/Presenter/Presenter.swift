@@ -18,7 +18,7 @@ class Presenter {
     }
     
     func buttonClick(tag: Int) -> String {
-        return interactor.buttonClick(tag: tag)
+        return interactor.buttonClick(tag: tag).replacingOccurrences(of: ".", with: ",")
     }
 }
 

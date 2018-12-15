@@ -67,11 +67,7 @@ class ViewController: UIViewController {
         default:
             label.font = label.font.withSize(72)
         }
-        var finalText = text
-        if(text != "0.0" && text.suffix(2) == ".0") {
-            finalText = String(text.prefix(text.count-2))
-        }
-        label.text = finalText.replacingOccurrences(of: ".", with: ",")
+        label.text = text
     }
     
     
