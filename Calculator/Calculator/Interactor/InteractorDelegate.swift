@@ -11,4 +11,5 @@ import Foundation
 protocol InteractorDelegate: class {
     func highlightButton(tag: Int)
     func cancelHighlightButtons()
+    func sendResultNumber(result: String)
 }

@@ -11,4 +11,5 @@ import Foundation
 protocol PresenterDelegate: class {
     func highlightButton(tag: Int)
     func cancelHighlightButtons()
+    func updateLable(text: String)
 }

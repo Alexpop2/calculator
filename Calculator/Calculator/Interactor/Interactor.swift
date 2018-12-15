@@ -18,8 +18,8 @@ class Interactor {
         buttonController.setCallback(delegate: self)
     }
     
-    func buttonClick(tag: Int) -> String {
-        return buttonController.operate(tag: tag)
+    func buttonClick(tag: Int) {
+        delegate?.sendResultNumber(result: buttonController.operate(tag: tag))
     }
 }
 

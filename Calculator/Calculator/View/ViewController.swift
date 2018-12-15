@@ -50,30 +50,8 @@ class ViewController: UIViewController {
     }
     
     @IBAction func buttonClick(_ sender: UIButton) {
-        updateLable(text: presenter.buttonClick(tag: sender.tag))
+        presenter.buttonClick(tag: sender.tag)
     }
-    
-    func updateLable(text: String) {
-        let charactersCount = LabelController.charactersCountWithKomma(text: text)
-        switch charactersCount {
-        case 6:
-            label.font = label.font.withSize(68)
-        case 7:
-            label.font = label.font.withSize(64)
-        case 8:
-            label.font = label.font.withSize(60)
-        case _ where charactersCount >= 9:
-            label.font = label.font.withSize(56)
-        default:
-            label.font = label.font.withSize(72)
-        }
-        var finalText = text
-        if(text != "0.0" && text.suffix(2) == ".0") {
-            finalText = String(text.prefix(text.count-2))
-        }
-        label.text = finalText.replacingOccurrences(of: ".", with: ",")
-    }
-    
     
     //попробовать сделать еще одно view внутри subview , сделать нужные отступы и вертикал центр, и аспект ратио 4:5 тогда будут квадраты выходить, у квадратов убрать отсупы слева и справа
     //или у текущей вьюхи сделать отсупы, и квадарты убрать отсутпы
@@ -103,5 +81,25 @@ extension ViewController: PresenterDelegate {
                                              blue: CGFloat(0xe12d30 & 0x0000FF) / 255.0,
                                              alpha: CGFloat(1.0))
         }
+    }
+    func updateLable(text: String) {
+        let charactersCount = LabelController.charactersCountWithKomma(text: text)
+        switch charactersCount {
+        case 6:
+            label.font = label.font.withSize(68)
+        case 7:
+            label.font = label.font.withSize(64)
+        case 8:
+            label.font = label.font.withSize(60)
+        case _ where charactersCount >= 9:
+            label.font = label.font.withSize(56)
+        default:
+            label.font = label.font.withSize(72)
+        }
+        var finalText = text
+        if(text != "0.0" && text.suffix(2) == ".0") {
+            finalText = String(text.prefix(text.count-2))
+        }
+        label.text = finalText.replacingOccurrences(of: ".", with: ",")
     }
 }
