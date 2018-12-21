@@ -17,8 +17,8 @@ class Presenter {
         self.delegate = delegate
     }
     
-    func buttonClick(tag: Int) -> String {
-        return interactor.buttonClick(tag: tag).replacingOccurrences(of: ".", with: ",")
+    func buttonClick(tag: Int) {
+        interactor.buttonClick(tag: tag)
     }
 }
 
@@ -29,5 +29,9 @@ extension Presenter: InteractorDelegate {
     
     func highlightButton(tag: Int) {
         delegate?.highlightButton(tag: tag)
+    }
+    
+    func sendResultNumber(result: String) {
+        delegate?.updateLable(text: result)
     }
 }

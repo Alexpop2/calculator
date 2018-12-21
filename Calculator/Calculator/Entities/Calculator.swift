@@ -159,7 +159,10 @@ class Calculator {
             condition = .secondNumberEnter
             return result
         case .ready:
-            return "\(firstNumber)"
+            if(operation == .subtraction) {
+                condition = .secondNumberEnter
+            }
+            return firstNumber
         case .equalResult:
             condition = .secondNumberEnter
             secondNumber = 0
