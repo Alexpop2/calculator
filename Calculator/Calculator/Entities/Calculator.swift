@@ -24,47 +24,52 @@ enum CalculatorOperations {
 }
 
 class Calculator {
-    private var firstNumber: String
-    private var secondNumber: String
+    private var firstNumber: Decimal
+    private var secondNumber: Decimal
     private var condition: CalculatorConditions
     private var operation: CalculatorOperations
+    private var komma: Bool
     
     init() {
-        firstNumber = "0"
-        secondNumber = "0"
+        firstNumber = 0
+        secondNumber = 0
         operation = CalculatorOperations.none
         condition = CalculatorConditions.ready
+        komma = false
     }
     
     func insertNumber(num: String) -> String {
+        guard let numDecimal = Decimal(string: num) else {
+            return "Ошибка"
+        }
         switch condition {
         case .firstNumberEnter:
-            if(LabelController.charactersCountWithKomma(text: firstNumber) < 9) {
-                if(firstNumber == "0") {
-                    firstNumber = num
+            if(firstNumber < 9999999999 || firstNumber > -999999999) {
+                if(!komma) {
+                    firstNumber = firstNumber * 10 + numDecimal
                 }
                 else {
-                    firstNumber += num
+                    firstNumber += numDecimal / 10
                 }
             }
-            return firstNumber
+            return "\(firstNumber)"
         case .secondNumberEnter:
-            if(LabelController.charactersCountWithKomma(text: secondNumber) < 9) {
-                if(secondNumber == "0") {
-                    secondNumber = num
+            if(secondNumber < 9999999999 || secondNumber > -999999999) {
+                if(!komma) {
+                    secondNumber = secondNumber * 10 + numDecimal
                 }
                 else {
-                    secondNumber += num
+                    secondNumber += numDecimal / 10
                 }
             }
-            return secondNumber
+            return "\(secondNumber)"
         case .ready:
             if(num == "0") {
                 return num
             }
-            firstNumber = num
+            firstNumber = numDecimal
             condition = .firstNumberEnter
-            return firstNumber
+            return "\(firstNumber)"
         case .equalResult:
             _ = ac()
             return insertNumber(num: num)
@@ -74,19 +79,23 @@ class Calculator {
     func insertKomma() -> String {
         switch condition {
         case .firstNumberEnter:
-            if(firstNumber.firstIndex(of: ".") == nil && firstNumber.count < 9) {
-                firstNumber += "."
+            if(firstNumber.exponent == 0 && (firstNumber < 9999999999
+                || firstNumber > -999999999)) {
+                komma = true
+                return "\(firstNumber),"
             }
-            return firstNumber
+            return "\(firstNumber)"
         case .secondNumberEnter:
-            if(secondNumber.firstIndex(of: ".") == nil && secondNumber.count < 9) {
-                secondNumber += "."
+            if(secondNumber.exponent == 0 && (secondNumber < 9999999999
+                || secondNumber > -999999999)) {
+                komma = true
+                return "\(secondNumber),"
             }
-            return secondNumber
+            return "\(secondNumber)"
         case .ready:
-            firstNumber = "0."
+            komma = true
             condition = .firstNumberEnter
-            return firstNumber
+            return "\(firstNumber),"
         case .equalResult:
             _ = ac()
             return insertKomma()
@@ -96,29 +105,17 @@ class Calculator {
     func unary() -> String {
         switch condition {
         case .firstNumberEnter:
-            if(firstNumber.prefix(1) != "-"){
-                if(firstNumber != "0") {
-                    firstNumber = "-" + firstNumber
-                }
-            } else {
-                firstNumber = firstNumber.replacingOccurrences(of: "-", with: "")
-            }
-            return firstNumber
+            firstNumber = -firstNumber
+            return "\(firstNumber)"
         case .secondNumberEnter:
-            if(secondNumber.prefix(1) != "-"){
-                if(secondNumber != "0") {
-                    secondNumber = "-" + secondNumber
-                }
-            } else {
-                secondNumber = secondNumber.replacingOccurrences(of: "-", with: "")
-            }
-            return secondNumber
+            secondNumber = -secondNumber
+            return "\(secondNumber)"
         case .ready:
             condition = .firstNumberEnter
-            return firstNumber
+            return "\(firstNumber)"
         case .equalResult:
             condition = .firstNumberEnter
-            secondNumber = "0"
+            secondNumber = 0
             return unary()
         }
     }
@@ -126,16 +123,16 @@ class Calculator {
     func procent() -> String {
         switch condition {
         case .firstNumberEnter:
-            secondNumber = "100"
+            secondNumber = 100
             operation = .division
             return equal()
         case .secondNumberEnter:
             firstNumber = secondNumber
-            secondNumber = "100"
+            secondNumber = 100
             operation = .division
             return equal()
         case .ready:
-            return firstNumber
+            return "\(firstNumber)"
         case .equalResult:
             condition = .firstNumberEnter
             return procent()
@@ -143,11 +140,12 @@ class Calculator {
     }
     
     func ac() -> String {
-        firstNumber = "0"
-        secondNumber = "0"
+        firstNumber = 0
+        secondNumber = 0
         operation = CalculatorOperations.none
         condition = CalculatorConditions.ready
-        return firstNumber
+        komma = false
+        return "\(firstNumber)"
     }
     
     func operate(type: CalculatorOperations) -> String {
@@ -155,7 +153,7 @@ class Calculator {
         switch condition {
         case .firstNumberEnter:
             condition = .secondNumberEnter
-            return firstNumber
+            return "\(firstNumber)"
         case .secondNumberEnter:
             let result = equal()
             condition = .secondNumberEnter
@@ -167,38 +165,28 @@ class Calculator {
             return firstNumber
         case .equalResult:
             condition = .secondNumberEnter
-            secondNumber = "0"
-            return firstNumber
+            secondNumber = 0
+            return "\(firstNumber)"
         }
     }
     
     func equal() -> String {
-        guard let firstNumDouble = Decimal(string: firstNumber) else {
-            return "Ошибка"
-        }
-        guard let secondNumDouble = Decimal(string: secondNumber) else {
-            return "Ошибка"
-        }
-        
         switch operation {
         case .none:
-            return firstNumber
+            return "\(firstNumber)"
         case .multiplication:
-            firstNumber = "\(firstNumDouble * secondNumDouble)"
+            firstNumber = firstNumber * secondNumber
             condition = .equalResult
         case .addition:
-            firstNumber = "\(firstNumDouble + secondNumDouble)"
+            firstNumber = firstNumber + secondNumber
             condition = .equalResult
         case .division:
-            firstNumber = "\(firstNumDouble / secondNumDouble)"
+            firstNumber = firstNumber / secondNumber
             condition = .equalResult
         case .subtraction:
-            firstNumber = "\(firstNumDouble - secondNumDouble)"
+            firstNumber = firstNumber - secondNumber
             condition = .equalResult
         }
-        if(firstNumber == "0.0") {
-            firstNumber = "0"
-        }
-        return firstNumber
+        return "\(firstNumber)"
     }
 }
