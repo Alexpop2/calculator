@@ -24,6 +24,7 @@ class ButtonController {
         guard let button = ButtonDatabase.buttons.first(where: {$0.tag == tag}) else {
             return ""
         }
+        delegate?.cancelHighlightButtons()
         switch button.type {
         case .num:
             guard let num = button.num else {
@@ -33,22 +34,17 @@ class ButtonController {
         case .komma:
             return calculator.insertKomma()
         case .ac:
-            delegate?.cancelHighlightButtons()
             return calculator.ac()
         case .addition:
-            delegate?.cancelHighlightButtons()
             delegate?.highlightButton(tag: button.tag)
             return calculator.operate(type: .addition)
         case .subtraction:
-            delegate?.cancelHighlightButtons()
             delegate?.highlightButton(tag: button.tag)
             return calculator.operate(type: .subtraction)
         case .multiplication:
-            delegate?.cancelHighlightButtons()
             delegate?.highlightButton(tag: button.tag)
             return calculator.operate(type: .multiplication)
         case .division:
-            delegate?.cancelHighlightButtons()
             delegate?.highlightButton(tag: button.tag)
             return calculator.operate(type: .division)
         case .equal:
